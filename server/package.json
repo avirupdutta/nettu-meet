@@ -5,7 +5,7 @@
   "scripts": {
     "start": "./integrations/start.sh",
     "start:prod": "ts-node ./src/index.ts",
-    "infra": "docker-compose -f ./integrations/docker-compose.yml up",
+    "infra": "docker-compose -f ./integrations/docker-compose.yml up -d",
     "infra:down": "docker-compose -f ./integrations/docker-compose.yml down",
     "test": "jest",
     "test:watch": "jest --watchAll",
@@ -18,7 +18,7 @@
   "author": "Fredrik Meringdal",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.24",
     "@types/node": "^14.14.7",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",

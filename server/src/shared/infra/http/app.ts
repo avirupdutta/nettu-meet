@@ -1,20 +1,21 @@
-import fs from 'fs';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
+import express from 'express';
+import fs from 'fs';
+import helmet from 'helmet';
 import http from 'http';
 import https from 'https';
-import express from 'express';
-import helmet from 'helmet';
 import morgan from 'morgan';
 import { Server, Socket } from 'socket.io';
 import { createAdapter } from 'socket.io-redis';
-import { v1Router, v1SocketHandler } from './api/v1';
-import { redisConnection } from '../../services';
-import { createDefaultAccountController } from '../../../modules/account/useCases/createDefaultAccount';
-import { _db_connect_promise } from '../db/connection';
 import { isProduction } from '../../../config';
-import { logger } from "../../../logger"
+import { logger } from "../../../logger";
+import { createDefaultAccountController } from '../../../modules/account/useCases/createDefaultAccount';
+import { redisConnection } from '../../services';
+import { _db_connect_promise } from '../db/connection';
+import { swaggerRouter } from './api/docs';
+import { v1Router, v1SocketHandler } from './api/v1';
 
 const corsConfig = {
     origin: isProduction ? '*' : '*',
@@ -24,6 +25,8 @@ const app = express();
 
 const createServer = () => {
     if (isProduction) {
+        console.log('------- PRODUCTION MODE --------');
+
         // Certificate
         const domain = process.env['SERVER_DOMAIN_NAME'];
         const privateKey = fs.readFileSync(`/etc/letsencrypt/live/${domain}/privkey.pem`, 'utf8');
@@ -36,6 +39,7 @@ const createServer = () => {
         };
         return https.createServer(credentials, app);
     } else {
+        console.log('------- DEVELOPMENT MODE --------');
         return http.createServer(app);
     }
 };
@@ -61,6 +65,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
 app.use(compression());
+app.use('/api/v1', swaggerRouter);
 app.use(helmet());
 app.use(morgan('combined'));
 app.use('/api/v1', v1Router);

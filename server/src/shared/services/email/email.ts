@@ -1,7 +1,7 @@
 import SES from 'aws-sdk/clients/ses';
 import fetch from 'node-fetch';
 import { awsConfig } from '../../../config';
-import { getEmailConfirmationTemplate, IEmailVerificationCodeParams } from './htmlTemplates/getTemplate';
+import { IEmailVerificationCodeParams } from './htmlTemplates/getTemplate';
 
 export interface IEmailService {
     sendEmailVerificationCode(toEmail: string, params: IEmailVerificationCodeParams): Promise<void>;
@@ -54,28 +54,33 @@ export class EmailService implements IEmailService {
     }
 
     async sendEmailVerificationCode(toEmail: string, params: IEmailVerificationCodeParams) {
-        this.sendMail({
-            Destination: {
-                ToAddresses: [toEmail],
-            },
-            Message: {
-                Body: {
-                    Html: {
-                        Charset,
-                        Data: getEmailConfirmationTemplate(params),
-                    },
-                    Text: {
-                        Charset,
-                        Data: `Email verification code for Nettu Meet is: ${params.code}`,
-                    },
-                },
-                Subject: {
-                    Charset,
-                    Data: 'Email verification code for Nettu Meet',
-                },
-            },
-            Source: awsConfig.sesEmailSource,
+        console.log({
+            email: toEmail,
+            code: params.code
         });
+
+        // this.sendMail({
+        //     Destination: {
+        //         ToAddresses: [toEmail],
+        //     },
+        //     Message: {
+        //         Body: {
+        //             Html: {
+        //                 Charset,
+        //                 Data: getEmailConfirmationTemplate(params),
+        //             },
+        //             Text: {
+        //                 Charset,
+        //                 Data: `Email verification code for Nettu Meet is: ${params.code}`,
+        //             },
+        //         },
+        //         Subject: {
+        //             Charset,
+        //             Data: 'Email verification code for Nettu Meet',
+        //         },
+        //     },
+        //     Source: awsConfig.sesEmailSource,
+        // });
     }
 
     async isDisposable(email: string) {

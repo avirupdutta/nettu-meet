@@ -1,7 +1,7 @@
-import { CreateMeetingUseCase } from './CreateMeetingUseCase';
-import { requestBodySchema, CreateMeetingDTO, CreateMeetingResponseDTO, RequestBodySchema } from './CreateMeetingDTO';
-import { CreateMeetingUseCaseErrors } from './CreateMeetingErrors';
 import { BaseController, NettuAppRequest, NettuAppResponse } from '../../../../shared/infra/http/models/BaseController';
+import { CreateMeetingDTO, CreateMeetingResponseDTO, requestBodySchema, RequestBodySchema } from './CreateMeetingDTO';
+import { CreateMeetingUseCaseErrors } from './CreateMeetingErrors';
+import { CreateMeetingUseCase } from './CreateMeetingUseCase';
 
 export class CreateMeetingController extends BaseController<RequestBodySchema> {
     private useCase: CreateMeetingUseCase;
@@ -21,6 +21,7 @@ export class CreateMeetingController extends BaseController<RequestBodySchema> {
 
         try {
             const result = await this.useCase.execute(dto);
+            console.log(result);
 
             if (result.isLeft()) {
                 const error = result.value;

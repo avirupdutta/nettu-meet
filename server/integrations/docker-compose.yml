@@ -12,12 +12,12 @@ services:
             - mongodb_data_nettumeet_container:/data/db
         logging:
             driver: none
-    redis:
-        image: redis
-        ports:
-            - 6379:6379
-        logging:
-            driver: none
+    # redis:
+    #     image: redis
+    #     ports:
+    #         - 6379:6379
+    #     logging:
+    #         driver: none
 
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0

@@ -2,13 +2,21 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
-    "lib": ["es2018", "esnext.asynciterable"],
+    "lib": [
+      "es2018",
+      "esnext.asynciterable"
+    ],
     "sourceMap": true,
     "noEmitOnError": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "types": ["node", "jest"],
-    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ],
     "removeComments": true,
     "noImplicitAny": true,
     "strict": true,
@@ -24,9 +32,16 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": [
+        "./src/*"
+      ]
     }
   },
-  "exclude": ["node_modules", "./src/**/*test.ts"],
-  "include": ["./src/**/*.ts"]
+  "exclude": [
+    "node_modules",
+    "./src/**/*test.ts"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
 }
