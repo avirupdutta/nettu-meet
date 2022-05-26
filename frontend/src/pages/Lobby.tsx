@@ -210,7 +210,7 @@ const Lobby = (props: Props) => {
   };
 
   const isMeetingBtnLinkActive = () => {
-    if (name.length === 0) {
+    if (username.length === 0) {
       return false;
     }
     if (stream != null) {
