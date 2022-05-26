@@ -18,6 +18,9 @@ interface MeetingPersistenceRaw {
     };
     resources: ResourcePersistenceRaw[];
     openingTime?: OpeningTime;
+    meetingHosts: string[];
+    presenters: string[];
+    attendees: string[];
 }
 
 export class MeetingMap {
@@ -37,6 +40,9 @@ export class MeetingMap {
             redirectURI: meeting.redirectURI,
             resources: meeting.resources.map((r) => ResourceMap.toDTO(r)),
             openingTime: meeting.openingTime,
+            meetingHosts: meeting.meetingHosts,
+            presenters: meeting.presenters,
+            attendees: meeting.attendees,
         };
     }
 
@@ -52,6 +58,9 @@ export class MeetingMap {
                 redirectURI: raw.redirectURI,
                 resources: raw.resources.map((r) => ResourceMap.toDomain(r)),
                 openingTime: raw.openingTime,
+                meetingHosts: raw.meetingHosts,
+                presenters: raw.presenters,
+                attendees: raw.attendees
             },
             new UniqueEntityID(raw._id),
         ).getValue();
@@ -69,6 +78,9 @@ export class MeetingMap {
             redirectURI: meeting.redirectURI,
             resources: meeting.resources.map((r) => ResourceMap.toPersistence(r)),
             openingTime: meeting.openingTime,
+            meetingHosts: meeting.meetingHosts,
+            presenters: meeting.presenters,
+            attendees: meeting.attendees
         };
     }
 }

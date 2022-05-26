@@ -65,12 +65,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
 app.use(compression());
-app.use('/api/v1', swaggerRouter);
+app.use('/nettu/api/v1', swaggerRouter);
 app.use(helmet());
 app.use(morgan('combined'));
-app.use('/api/v1', v1Router);
+app.use('/nettu/api/v1', v1Router);
 
-server.listen(port, async () => {
+server.listen(port, '127.0.0.1' as unknown as number, async () => {
     logger.info(`[App]: Listening on port ${port}`);
 
     // Setup default account if provided

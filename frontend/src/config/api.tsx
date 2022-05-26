@@ -2,15 +2,15 @@ const isDevelopment: boolean =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 const devApiConfig = {
-  baseUrl: "http://localhost:5000/api/v1",
+  baseUrl: "http://localhost:5000/nettu/api/v1",
   url: "http://localhost:5000",
-  docsUrl: "http://localhost:5000/api/v1/docs",
+  docsUrl: "http://localhost:5000/nettu/api/v1/docs",
 };
 
 const prodApiConfig = {
-  baseUrl: "https://api.meet.nettubooking.com/api/v1",
+  baseUrl: "https://api.meet.nettubooking.com/nettu/api/v1",
   url: "https://api.meet.nettubooking.com",
-  docsUrl: "https://api.meet.nettubooking.com/api/v1/docs",
+  docsUrl: "https://api.meet.nettubooking.com/nettu/api/v1/docs",
 };
 
 const frontendUrl = !isDevelopment

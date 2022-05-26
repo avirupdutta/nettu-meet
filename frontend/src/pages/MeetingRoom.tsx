@@ -8,41 +8,41 @@ import {
   makeStyles,
   ThemeProvider,
   Toolbar,
-  Typography,
+  Typography
 } from "@material-ui/core";
+import LeaveIcon from "@material-ui/icons/CallEnd";
+import MicOffIcon from "@material-ui/icons/MicOffRounded";
+import MicIcon from "@material-ui/icons/MicOutlined";
+import ScreenShareIcon from "@material-ui/icons/ScreenShareOutlined";
+import SettingsIcon from "@material-ui/icons/SettingsOutlined";
+import StopScreenShareIcon from "@material-ui/icons/StopScreenShareOutlined";
+import VideoCamOffIcon from "@material-ui/icons/VideocamOffRounded";
+import VideoCamIcon from "@material-ui/icons/VideocamOutlined";
 import { Fragment, useEffect, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import LeaveIcon from "@material-ui/icons/CallEnd";
-
-import { NettuLogoWithLabel } from "../shared/components/NettuLogoWithLabel";
-
-import VideoCamIcon from "@material-ui/icons/VideocamOutlined";
-import VideoCamOffIcon from "@material-ui/icons/VideocamOffRounded";
-import MicIcon from "@material-ui/icons/MicOutlined";
-import MicOffIcon from "@material-ui/icons/MicOffRounded";
-import ScreenShareIcon from "@material-ui/icons/ScreenShareOutlined";
-import StopScreenShareIcon from "@material-ui/icons/StopScreenShareOutlined";
-import SettingsIcon from "@material-ui/icons/SettingsOutlined";
-import { Timer } from "../shared/components/Timer";
-import { CanvasToolbar } from "../modules/canvas/components/CanvasToolbar";
 import { Canvas } from "../modules/canvas/components/Canvas";
-import { ChatBtn } from "../modules/chat/components/ChatBtn";
+import { CanvasToolbar } from "../modules/canvas/components/CanvasToolbar";
 import { PageMenu } from "../modules/canvas/components/PageMenu";
-import { PeersVideoLayout } from "../modules/media/components/PeersVideoLayout";
-import { meetingState } from "../modules/meeting/state/meeting";
-import { meetingInteractor } from "../modules/meeting/interactors";
+import { ChatBtn } from "../modules/chat/components/ChatBtn";
 import { ChatDrawer } from "../modules/chat/components/ChatDrawer";
 import { chatInteractor } from "../modules/chat/interactors/chatInteractor";
+import { PeersVideoLayout } from "../modules/media/components/PeersVideoLayout";
+import { useLocalStreams } from "../modules/media/state/state";
+import { leaveRoom } from "../modules/media/state/utils";
 import { ResourceBtn } from "../modules/meeting/components/ResourceBtn";
 import { ResourceDrawer } from "../modules/meeting/components/ResourceDrawer";
-import { leaveRoom } from "../modules/media/state/utils";
+import { meetingInteractor } from "../modules/meeting/interactors";
+import { meetingState } from "../modules/meeting/state/meeting";
+import { DeviceSelectPopover } from "../shared/components/DeviceSelectPopover";
+import { NettuLogoWithLabel } from "../shared/components/NettuLogoWithLabel";
+import { Timer } from "../shared/components/Timer";
 import { useLayoutState } from "../shared/services/layout/layout";
 import { darkTheme } from "../shared/services/theme/darkTheme";
 import { lightTheme } from "../shared/services/theme/lightTheme";
-import { useLocalStreams } from "../modules/media/state/state";
-import { DeviceSelectPopover } from "../shared/components/DeviceSelectPopover";
 
-interface Props extends RouteComponentProps<{ meetingId: string }> {}
+
+
+interface Props extends RouteComponentProps<{ meetingId: string }> { }
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -244,9 +244,9 @@ const MeetingRoom = (props: Props) => {
           pages={
             meeting
               ? meeting.canvasIds.map((canvasId) => ({
-                  id: canvasId,
-                  active: canvasId === meeting.activeCanvasId,
-                }))
+                id: canvasId,
+                active: canvasId === meeting.activeCanvasId,
+              }))
               : []
           }
           onChange={(canvasId) => meetingInteractor.setActiveCanvas(canvasId)}

@@ -11,15 +11,13 @@
 import {
   Button,
   makeStyles,
-  Paper,
-  Tooltip,
-  TextField,
+  Paper, TextField, Tooltip
 } from "@material-ui/core";
 import MicOffIcon from "@material-ui/icons/MicOffRounded";
 import MicIcon from "@material-ui/icons/MicOutlined";
+import SettingsIcon from "@material-ui/icons/SettingsOutlined";
 import VideoCamOffIcon from "@material-ui/icons/VideocamOffRounded";
 import VideoCamIcon from "@material-ui/icons/VideocamOutlined";
-import SettingsIcon from "@material-ui/icons/SettingsOutlined";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -28,12 +26,11 @@ import { useSoundMeter } from "../modules/media/services/SoundMeter";
 import {
   requestPermissions,
   useLocalStreams,
-  useProducerStore,
+  useProducerStore
 } from "../modules/media/state/state";
 import { joinRoom } from "../modules/media/state/utils";
 import { meetingInteractor } from "../modules/meeting/interactors";
 import { meetingState } from "../modules/meeting/state/meeting";
-import { NettuLogoWithLabel } from "../shared/components/NettuLogoWithLabel";
 import { DeviceSelectPopover } from "../shared/components/DeviceSelectPopover";
 
 const useStyles = makeStyles((theme) => ({
@@ -141,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps { }
 
 const NAME_LOCAL_STORAGE_KEY = "nettu-meet-display-name";
 
@@ -221,9 +218,6 @@ const Lobby = (props: Props) => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        <NettuLogoWithLabel label="Nettu Meet" />
-      </div>
       <div className={classes.body}>
         <Paper className={classes.videoPreview}>
           <div

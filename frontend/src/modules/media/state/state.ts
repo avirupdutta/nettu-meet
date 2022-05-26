@@ -4,13 +4,13 @@ import {
   Device,
   Producer,
   RtpCapabilities,
-  Transport,
+  Transport
 } from "mediasoup-client/lib/types";
 import create from "zustand";
+import { logger } from '../../../logger';
 import { signalingChannel } from "../../../shared/services/theme/signalling";
 import { RoomState } from "../services/PeersManager";
 import { sig } from "./sig";
-import {logger} from '../../../logger';
 
 type ProducerStore = {
   webcam?: Producer;
@@ -29,11 +29,16 @@ export const useProducerStore = create<ProducerStore>((set) => ({
           if (!transports) return;
           // Create
           logger.info("Creating " + media);
-          this[media] = await transports.send.produce({
-            track: localStreams[media].getTracks()[0],
-            encodings: [],
-            appData: { mediaTag: media },
-          });
+          try {
+            this[media] = await transports.send.produce({
+              track: localStreams[media].getTracks()[0],
+              encodings: [],
+              appData: { mediaTag: media },
+            });
+          }
+          catch (error) {
+            console.log('error occured', error);
+          }
         } else if (mediaProducer.paused) {
           logger.info("Resuming " + media);
           await sig("resume-producer", { producerId: mediaProducer.id });
@@ -205,7 +210,7 @@ export const useActivePeerConsumers = () => {
       consumers: peerConsumers.filter((c) => !c.closed && !c.paused),
     });
   }
-  logger.info({activePeerConsumers : activePeerConsumers}, "activePeerConsumers");
+  logger.info({ activePeerConsumers: activePeerConsumers }, "activePeerConsumers");
 
   return activePeerConsumers;
 };
@@ -348,7 +353,7 @@ export const useLocalStreams = create<LocalStreamsStore>((set, get) => ({
         },
       });
     } catch (error) {
-      logger.error({error:error}, "error");
+      logger.error({ error: error }, "error");
       alert("Unable to capture audio");
     }
   },
@@ -408,7 +413,7 @@ export const useLocalStreams = create<LocalStreamsStore>((set, get) => ({
         },
       });
     } catch (error) {
-      logger.error({error:error}, "error");
+      logger.error({ error: error }, "error");
       alert("Unable to capture webcam");
     }
   },
@@ -467,7 +472,7 @@ export const useLocalStreams = create<LocalStreamsStore>((set, get) => ({
         },
       });
     } catch (error) {
-      logger.error({error:error}, "error");
+      logger.error({ error: error }, "error");
       alert("Unable top capture screen");
     }
   },
@@ -516,7 +521,7 @@ export const useLocalStreams = create<LocalStreamsStore>((set, get) => ({
         },
       });
 
-      logger.info({defaultAudioDevice:defaultAudioDevice},"Lost");
+      logger.info({ defaultAudioDevice: defaultAudioDevice }, "Lost");
 
       // fallback to default
       if (defaultAudioDevice) {

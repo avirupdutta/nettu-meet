@@ -6,6 +6,10 @@ export interface GetMeetingDTO {
     meetingId: string;
 }
 
+export interface GetAccountDTO {
+    accountId: string;
+}
+
 export const getMeetingPathSchema = Joi.object({
     meetingId: Joi.string().uuid(),
 }).optional();

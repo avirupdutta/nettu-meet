@@ -17,6 +17,9 @@ export class CreateMeetingController extends BaseController<RequestBodySchema> {
             redirectURI: req.body.redirectURI,
             openingTime: req.body.openingTime,
             account: req.account!,
+            meetingHosts: req.body.meetingHosts,
+            presenters: req.body.presenters,
+            attendees: req.body.attendees
         };
 
         try {
@@ -38,6 +41,8 @@ export class CreateMeetingController extends BaseController<RequestBodySchema> {
                 return res.created<CreateMeetingResponseDTO>(dto);
             }
         } catch (err) {
+            console.log(err);
+
             return res.fail();
         }
     }

@@ -16,4 +16,7 @@ export interface MeetingDTO {
         iconURL?: string;
     };
     resources: ResourceDTO[];
+    meetingHosts: string[];
+    presenters: string[];
+    attendees: string[];
 }

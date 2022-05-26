@@ -1,5 +1,6 @@
 import express from 'express';
 import { Socket } from 'socket.io';
+import { logger } from "../../../../../logger";
 import { middleware } from '../../../../../shared/infra/http';
 import { io } from '../../../../../shared/infra/http/app';
 import { sendChatMessageController } from '../../../../chat/useCases/sendChatMessage';
@@ -11,17 +12,18 @@ import { createResourceController } from '../../../useCases/createResource';
 import { deleteMeetingController } from '../../../useCases/deleteMeeting';
 import { deleteResourceController } from '../../../useCases/deleteResource';
 import { getCanvasController } from '../../../useCases/getCanvas';
-import { getMeetingController } from '../../../useCases/getMeeting';
+import { getMeetingByAccountIdController, getMeetingController } from '../../../useCases/getMeeting';
 import { setActiveCanvasController } from '../../../useCases/setActiveCanvas';
 import { setCanvasDataController } from '../../../useCases/setCanvasData';
 import { updateMeetingController } from '../../../useCases/updateMeeting';
-import {logger} from "../../../../../logger"
 
 const meetingRouter = express.Router();
 
 meetingRouter.post('/', middleware.ensureAccountAdmin(), (req, res) => createMeetingController.execute(req, res));
 
 meetingRouter.post('/demo', (req, res) => createDemoMeetingController.execute(req, res));
+
+meetingRouter.get('/getMeetingByAccountId/:meetingId', (req, res) => getMeetingByAccountIdController.execute(req, res));
 
 meetingRouter.get('/:meetingId', (req, res) => getMeetingController.execute(req, res));
 
@@ -43,7 +45,7 @@ meetingRouter.get('/canvas/:canvasId', (req, res) => getCanvasController.execute
 
 const meetingSocketHandler = (socket: Socket) => {
     socket.on('join-room', async (meetingId) => {
-        logger.info({socketId : socket.id, meetingId : meetingId}, 'socket: ' + socket.id + ', joined room: ' + meetingId);
+        logger.info({ socketId: socket.id, meetingId: meetingId }, 'socket: ' + socket.id + ', joined room: ' + meetingId);
 
         socket.join(meetingId);
         socket.broadcast.to(meetingId).emit('user-connected', socket.id);

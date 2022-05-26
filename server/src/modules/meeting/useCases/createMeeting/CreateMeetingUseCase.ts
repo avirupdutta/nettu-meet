@@ -1,17 +1,17 @@
+import * as config from '../../../../config';
 import { AppError } from '../../../../shared/core/AppError';
-import { Either, left, Result, right } from '../../../../shared/core/Result';
+import { Either, left, right } from '../../../../shared/core/Result';
 import { UseCase } from '../../../../shared/core/UseCase';
 import { UniqueEntityID } from '../../../../shared/domain/UniqueEntityID';
+import { Chat } from '../../../chat/domain/chat';
+import { IChatRepo } from '../../../chat/repos/chatRepo';
+import { Canvas } from '../../domain/canvas';
 import { Meeting } from '../../domain/meeting';
+import { ICanvasRepo } from '../../repos/canvasRepo';
 import { IMeetingRepo } from '../../repos/meetingRepo';
 import { CreateMeetingDTO, CreateMeetingResponseDTO } from './CreateMeetingDTO';
 import { CreateMeetingUseCaseErrors } from './CreateMeetingErrors';
 
-import * as config from '../../../../config';
-import { ICanvasRepo } from '../../repos/canvasRepo';
-import { Canvas } from '../../domain/canvas';
-import { Chat } from '../../../chat/domain/chat';
-import { IChatRepo } from '../../../chat/repos/chatRepo';
 
 type Response = Either<
     | CreateMeetingUseCaseErrors.InvalidPropertyError
@@ -46,8 +46,8 @@ export class CreateMeetingUseCase implements UseCase<CreateMeetingDTO, Promise<R
             const redirectURI = request.redirectURI
                 ? request.redirectURI
                 : request.account.defaultRedirectURI
-                ? request.account.defaultRedirectURI
-                : config.baseFrontendURL;
+                    ? request.account.defaultRedirectURI
+                    : config.baseFrontendURL;
 
             const defaultCanvasId = new UniqueEntityID();
             const chatId = new UniqueEntityID();
@@ -66,6 +66,9 @@ export class CreateMeetingUseCase implements UseCase<CreateMeetingDTO, Promise<R
                 chatId,
                 resources: [],
                 redirectURI,
+                meetingHosts: request.meetingHosts,
+                presenters: request.presenters,
+                attendees: request.attendees,
             });
 
             if (meetingOrErr.isFailure) {

@@ -16,6 +16,15 @@ export class MongoMeetingRepo extends BaseRepo implements IMeetingRepo {
         return meeting ? MeetingMap.toDomain(meeting) : undefined;
     }
 
+    async getMeetingByAccountId(id: string): Promise<Meeting | undefined> {
+        const meeting = await this.collection.findOne({
+            account: {
+                accountId: id,
+            }
+        });
+        return meeting ? MeetingMap.toDomain(meeting) : undefined;
+    }
+
     async deleteMeetingByMeetingId(id: string): Promise<void> {
         await this.collection.findOneAndDelete({
             _id: id,

@@ -26,6 +26,9 @@ export interface MeetingProps {
         iconURL?: string;
     };
     resources: Resource[];
+    meetingHosts: string[];
+    presenters: string[];
+    attendees: string[];
 }
 
 export class Meeting extends Entity<MeetingProps> {
@@ -59,6 +62,18 @@ export class Meeting extends Entity<MeetingProps> {
 
     get account() {
         return this.props.account;
+    }
+
+    get meetingHosts() {
+        return this.props.meetingHosts;
+    }
+
+    get presenters() {
+        return this.props.presenters;
+    }
+
+    get attendees() {
+        return this.props.attendees;
     }
 
     get openingTime() {
