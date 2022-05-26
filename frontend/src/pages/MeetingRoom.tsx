@@ -105,7 +105,8 @@ const styles = {
 
 const MeetingRoom = (props: Props) => {
   const classes = useStyles();
-
+  const params = (new URL(window.location.href)).searchParams
+  const [userId, setUserId] = useState('')
   const [s, setS] = useState(Math.random());
 
   const [devicesAnchorEl, setDevicesAnchorEl] = useState<any>(null);
@@ -122,6 +123,8 @@ const MeetingRoom = (props: Props) => {
   const { meeting } = meetingState();
   const { videoMode, toggleVideoMode } = useLayoutState();
 
+  console.log('meeting ==>', { meeting, userId });
+
   const displayUpperToolbar = () => (
     <Toolbar variant="dense">
       <Box
@@ -131,55 +134,58 @@ const MeetingRoom = (props: Props) => {
         width="100%"
       >
         <NettuLogoWithLabel label={meeting ? meeting.title : ""} />
-        <ButtonGroup disableElevation color="primary">
-          <Button
-            variant={config.webcam ? "outlined" : "contained"}
-            onClick={() => (config.webcam ? muteWebcam() : unmuteWebcam())}
-          >
-            {config.webcam ? (
-              <VideoCamOffIcon style={styles.mediaIcon} />
-            ) : (
-              <VideoCamIcon
-                style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
-              />
-            )}
-          </Button>
-          <Button
-            variant={config.audio ? "outlined" : "contained"}
-            onClick={() => (config.audio ? muteAudio() : unmuteAudio())}
-          >
-            {config.audio ? (
-              <MicOffIcon style={styles.mediaIcon} />
-            ) : (
-              <MicIcon
-                style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
-              />
-            )}
-          </Button>
-          <Button
-            variant={config.screen ? "outlined" : "contained"}
-            onClick={() => (config.screen ? muteScreen() : unmuteScreen())}
-          >
-            {config.screen ? (
-              <StopScreenShareIcon style={styles.mediaIcon} />
-            ) : (
-              <ScreenShareIcon
-                style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
-              />
-            )}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={(e) => setDevicesAnchorEl(e.currentTarget)}
-          >
-            <SettingsIcon />
-          </Button>
-          <DeviceSelectPopover
-            anchorEl={devicesAnchorEl}
-            open={Boolean(devicesAnchorEl)}
-            onClose={() => setDevicesAnchorEl(undefined)}
-          />
-        </ButtonGroup>
+        {
+          (meeting?.presenters.includes(userId) || meeting?.meetingHosts.includes(userId)) &&
+          <ButtonGroup disableElevation color="primary">
+            <Button
+              variant={config.webcam ? "outlined" : "contained"}
+              onClick={() => (config.webcam ? muteWebcam() : unmuteWebcam())}
+            >
+              {config.webcam ? (
+                <VideoCamOffIcon style={styles.mediaIcon} />
+              ) : (
+                <VideoCamIcon
+                  style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
+                />
+              )}
+            </Button>
+            <Button
+              variant={config.audio ? "outlined" : "contained"}
+              onClick={() => (config.audio ? muteAudio() : unmuteAudio())}
+            >
+              {config.audio ? (
+                <MicOffIcon style={styles.mediaIcon} />
+              ) : (
+                <MicIcon
+                  style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
+                />
+              )}
+            </Button>
+            <Button
+              variant={config.screen ? "outlined" : "contained"}
+              onClick={() => (config.screen ? muteScreen() : unmuteScreen())}
+            >
+              {config.screen ? (
+                <StopScreenShareIcon style={styles.mediaIcon} />
+              ) : (
+                <ScreenShareIcon
+                  style={{ ...styles.mediaIcon, ...styles.mediaIconActive }}
+                />
+              )}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => setDevicesAnchorEl(e.currentTarget)}
+            >
+              <SettingsIcon />
+            </Button>
+            <DeviceSelectPopover
+              anchorEl={devicesAnchorEl}
+              open={Boolean(devicesAnchorEl)}
+              onClose={() => setDevicesAnchorEl(undefined)}
+            />
+          </ButtonGroup>
+        }
         <Box display="flex" alignItems="center" justifyContent="flex-end">
           {videoMode && (
             <Button
@@ -215,6 +221,12 @@ const MeetingRoom = (props: Props) => {
       </Box>
     </Toolbar>
   );
+
+  useEffect(() => {
+    if (params.get('userId')) {
+      setUserId(String(params.get('userId')))
+    }
+  }, [params])
 
   const displayTopPadding = () => (
     <Fragment>
@@ -303,8 +315,8 @@ const MeetingRoom = (props: Props) => {
           }}
         >
           {displayUpperToolbar()}
-          {!videoMode && <Divider />}
-          {!videoMode && <CanvasToolbar />}
+          {!videoMode && (meeting?.presenters.includes(userId) || meeting?.meetingHosts.includes(userId)) && <Divider />}
+          {!videoMode && (meeting?.presenters.includes(userId) || meeting?.meetingHosts.includes(userId)) && <CanvasToolbar />}
         </AppBar>
         <div className={classes.body}>
           {displayTopPadding()}

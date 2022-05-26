@@ -2,12 +2,12 @@ import {
   Device,
   RtpEncodingParameters,
   Transport,
-  TransportOptions,
+  TransportOptions
 } from "mediasoup-client/lib/types";
-import { sig } from "./sig";
+import { logger } from '../../../logger';
 import { signalingChannel } from "../../../shared/services/theme/signalling";
-import { useRoomStore, useDeviceStore, useTransportStore } from "./state";
-import {logger} from '../../../logger'
+import { sig } from "./sig";
+import { useDeviceStore, useRoomStore, useTransportStore } from "./state";
 
 interface PeerMedia {
   paused: boolean;
@@ -62,6 +62,8 @@ export const joinRoom = async (roomId: string, name: string) => {
     return;
   }
   const { device } = useDeviceStore.getState();
+  console.log('device!', device!);
+
   const [sendTransport, recvTransport] = await Promise.all([
     createTransport("send", sendTransportOptions, device!, roomId),
     createTransport("recv", recvTransportOptions, device!, roomId),
@@ -99,7 +101,7 @@ export const leaveRoom = async () => {
   // close everything on the server-side (transports, producers, consumers)
   const { error } = await sig("leave", {});
   if (error) {
-    logger.error({error : error}, "error");
+    logger.error({ error: error }, "error");
   }
 
   const { transports } = useTransportStore.getState();
@@ -113,7 +115,7 @@ export const leaveRoom = async () => {
       transports.recv.close();
     }
   } catch (e) {
-    logger.error({error : e}, "error");
+    logger.error({ error: e }, "error");
   }
   // this.recvTransport = undefined;
   // this.sendTransport = undefined;
@@ -127,13 +129,13 @@ export const leaveRoom = async () => {
 };
 
 async function pauseConsumer(consumerId: string) {
-  logger.info({consumerId : consumerId}, "pause consumer");
+  logger.info({ consumerId: consumerId }, "pause consumer");
   try {
     await sig("pause-consumer", { consumerId });
     useRoomStore.getState().pauseConsumer(consumerId);
     // this.update();
   } catch (e) {
-    logger.error({error: e}, "error");
+    logger.error({ error: e }, "error");
   }
 }
 
@@ -144,12 +146,12 @@ async function resumeConsumer(consumerId: string) {
     useRoomStore.getState().resumeConsumer(consumerId);
     // this.update();
   } catch (e) {
-    logger.error({error: e}, "error");
+    logger.error({ error: e }, "error");
   }
 }
 
 async function closeConsumer(consumerId: string) {
-  logger.info({consumerId:consumerId}, "close consumer");
+  logger.info({ consumerId: consumerId }, "close consumer");
   try {
     // tell the server we're closing this consumer. (the server-side
     // consumer may have been closed already, but that's okay.)
@@ -158,7 +160,7 @@ async function closeConsumer(consumerId: string) {
     useRoomStore.getState().closeConsumer(consumerId);
     // this.update();
   } catch (e) {
-    logger.error({error: e}, "error");
+    logger.error({ error: e }, "error");
   }
 }
 
@@ -174,7 +176,7 @@ async function createTransport(
   // ask the server to create a server-side transport object and send
   // us back the info we need to create a client-side transport
   let transport: Transport;
-  logger.info({transportOptions : transportOptions}, "transport options");
+  logger.info({ transportOptions: transportOptions }, "transport options");
 
   if (direction === "recv") {
     transport = device.createRecvTransport(transportOptions);
@@ -188,13 +190,13 @@ async function createTransport(
   // start flowing for the first time. send dtlsParameters to the
   // server, then call callback() on success or errback() on failure.
   transport.on("connect", async ({ dtlsParameters }, callback, errback) => {
-    logger.info({direction : direction}, "transport connect event");
+    logger.info({ direction: direction }, "transport connect event");
     const { error } = await sig("connect-transport", {
       transportId: transportOptions.id,
       dtlsParameters,
     });
     if (error) {
-      logger.error({direction : direction, error : error}, "error connecting transport");
+      logger.error({ direction: direction, error: error }, "error connecting transport");
       errback();
       return;
     }
@@ -208,7 +210,7 @@ async function createTransport(
     transport.on(
       "produce",
       async ({ kind, rtpParameters, appData }, callback, errback) => {
-        logger.info({mediaTag : appData.mediaTag}, "transport produce event");
+        logger.info({ mediaTag: appData.mediaTag }, "transport produce event");
         // we may want to start out paused (if the checkboxes in the ui
         // aren't checked, for each media type. not very clean code, here
         // but, you know, this isn't a real application.)
@@ -227,7 +229,7 @@ async function createTransport(
           roomId,
         });
         if (error) {
-          logger.error({error:error}, "error setting up server-side producer");
+          logger.error({ error: error }, "error setting up server-side producer");
           errback();
           return;
         }
@@ -246,7 +248,7 @@ async function createTransport(
     // we leave the room)
     if (state === "closed" || state === "failed" || state === "disconnected") {
       logger.info("transport closed ... leaving the room and resetting");
-      leaveRoom();
+      // leaveRoom();
     }
   });
 
@@ -255,9 +257,9 @@ async function createTransport(
 
 const setupSignallingListeners = (roomId: string) => {
   signalingChannel.emit("join-room", roomId);
-  signalingChannel.on("user-connected", async (peerId: string) => {});
+  signalingChannel.on("user-connected", async (peerId: string) => { });
 
-  signalingChannel.on("user-disconnected", (disconnectedPeerId: string) => {});
+  signalingChannel.on("user-disconnected", (disconnectedPeerId: string) => { });
 
   signalingChannel.on("consumerPaused", (data: { consumerId: string }) => {
     pauseConsumer(data.consumerId);
@@ -315,7 +317,7 @@ const setupSignallingListeners = (roomId: string) => {
     // until we're connected, then send a resume request to the server
     // to get our first keyframe and start displaying video
     while (transports.recv.connectionState !== "connected") {
-      logger.info({connectionState : transports.recv.connectionState},"  transport connstate");
+      logger.info({ connectionState: transports.recv.connectionState }, "  transport connstate");
       await sleep(100);
     }
 

@@ -11,7 +11,7 @@
 import {
   Button,
   makeStyles,
-  Paper, TextField, Tooltip
+  Paper, TextField, Tooltip, Typography
 } from "@material-ui/core";
 import MicOffIcon from "@material-ui/icons/MicOffRounded";
 import MicIcon from "@material-ui/icons/MicOutlined";
@@ -145,6 +145,8 @@ const NAME_LOCAL_STORAGE_KEY = "nettu-meet-display-name";
 const Lobby = (props: Props) => {
   const classes = useStyles();
   const videoRef = useRef<any>();
+  const params = (new URL(window.location.href)).searchParams
+  const [username, setUsername] = useState(String(params.get('username')))
 
   const {
     audio,
@@ -179,6 +181,12 @@ const Lobby = (props: Props) => {
   useEffect(() => {
     requestPermissions();
   }, []);
+
+  // useEffect(() => {
+  //   if (params.get('username')) {
+  //     setUsername()
+  //   }
+  // }, [params])
 
   const { meeting } = meetingState();
 
@@ -296,11 +304,17 @@ const Lobby = (props: Props) => {
             ))}
           </div>
         )}
+        {
+          !!meeting && meeting.title &&
+          <Typography style={{ alignSelf: 'flex-start', marginBottom: 10, fontSize: 18 }}><strong>Room Name:</strong> {meeting.title}</Typography>
+        }
         <TextField
           variant="filled"
-          value={name}
-          placeholder="Your name ..."
-          onChange={(e) => setName(e.target.value)}
+          value={username}
+          onChange={(e) => {
+            console.log(e);
+            setUsername(e.target.value)
+          }}
           fullWidth
           style={{
             marginBottom: "20px",

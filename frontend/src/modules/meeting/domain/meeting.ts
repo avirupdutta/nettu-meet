@@ -18,4 +18,7 @@ export type Meeting = {
     label: string;
     iconURL?: string;
   };
+  meetingHosts: string[];
+  attendees: string[];
+  presenters: string[];
 };

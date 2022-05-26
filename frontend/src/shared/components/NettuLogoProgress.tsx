@@ -1,6 +1,6 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
-import NettuLogoImg from "../../assets/logos/NettuLetter.png";
+import NettuLogoImg from "../../assets/logos/logo.png";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
