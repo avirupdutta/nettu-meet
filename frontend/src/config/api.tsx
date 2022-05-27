@@ -8,13 +8,13 @@ const devApiConfig = {
 };
 
 const prodApiConfig = {
-  baseUrl: "https://api.meet.nettubooking.com/nettu/api/v1",
-  url: "https://api.meet.nettubooking.com",
-  docsUrl: "https://api.meet.nettubooking.com/nettu/api/v1/docs",
+  baseUrl: "https://backend.instaconnect.io/nettu/api/v1",
+  url: "https://backend.instaconnect.io/nettu",
+  docsUrl: "https://backend.instaconnect.io/nettu/api/v1/docs",
 };
 
 const frontendUrl = !isDevelopment
-  ? "https://meet.nettubooking.com"
+  ? "https://backend.instaconnect.io/nettu-fe"
   : "http://localhost:3000";
 
 const apiConfig = !isDevelopment ? prodApiConfig : devApiConfig;

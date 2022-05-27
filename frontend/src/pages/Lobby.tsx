@@ -194,8 +194,8 @@ const Lobby = (props: Props) => {
 
   const goToMeeting = async () => {
     if (meeting) {
-      localStorage.setItem(NAME_LOCAL_STORAGE_KEY, name);
-      await joinRoom(meeting.id, name);
+      localStorage.setItem(NAME_LOCAL_STORAGE_KEY, username);
+      await joinRoom(meeting.id, username);
 
       // manually update
       useProducerStore.getState().onStreamUpdate(useLocalStreams.getState());

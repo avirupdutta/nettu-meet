@@ -49,7 +49,7 @@ const server = createServer();
 const port = process.env.PORT || (isProduction ? 443 : 5000);
 
 export const io = new Server(server, {
-    path: '/api/v1/ws',
+    path: '/nettu/api/v1/ws',
     adapter: createAdapter({
         pubClient: redisConnection,
         subClient: redisConnection.duplicate(),
